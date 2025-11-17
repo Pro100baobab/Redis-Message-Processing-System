@@ -1,5 +1,150 @@
 # Redis Message Processing System
 
+A Python-based message processing system using Redis as a message broker. The system consists of a producer that generates messages and a consumer that processes them in batches with logging capabilities.
+
+## 🚀 Features
+
+- **Message Generation**: Create diverse system messages with different types (INFO, WARNING, ERROR, DEBUG)
+- **Redis Buffering**: Temporary message storage in Redis List before processing
+- **Batch Processing**: Efficient message processing in batches for performance optimization
+- **Log Sorting**: Automatic saving of messages to appropriate log files by type
+- **Flexible Configuration**: Easy system parameter tuning through configuration file
+
+## 📋 Requirements
+
+- Python 3.7+
+- Redis Server
+- Libraries: `redis`
+
+## 🔧 Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/Pro100baobab/Redis-Message-Processing-System.git
+cd redis-message-processing
+```
+
+2. Install dependencies:
+```bash
+pip install redis
+```
+
+3. Make sure Redis server is running:
+```bash
+redis-server
+```
+
+## ⚙️ Configuration
+
+All system settings are located in `config.py`:
+
+### Redis Configuration
+```python
+REDIS_CONFIG = {
+    'host': 'localhost',  # Redis host
+    'port': 6379,         # Redis port
+    'db': 0,              # Database number
+    'decode_responses': True  # Response decoding
+}
+```
+
+### Buffer Configuration
+```python
+BUFFER_CONFIG = {
+    'buffer_key': 'message_buffer',  # Redis List key for messages
+    'batch_size': 5,                 # Processing batch size
+    'processing_delay': 4,           # Delay between batch processing (sec)
+    'timeout': 10                    # Message waiting timeout (sec)
+}
+```
+
+### Message Configuration
+```python
+MESSAGE_CONFIG = {
+    'max_messages': 20,              # Maximum number of messages
+    'delay_between_messages': 2      # Delay between messages (sec)
+}
+```
+
+## 🚀 Usage
+
+### Starting Producer
+```bash
+python producer.py
+```
+The producer will start generating and sending messages to Redis.
+
+### Starting Consumer
+```bash
+python consumer.py
+```
+The consumer will start processing messages from Redis and saving them to appropriate log files.
+
+### Parallel Execution
+For full system operation, it's recommended to run both components simultaneously (in different terminals).
+
+## 📁 Project Structure
+
+```
+redis-message-processing/
+├── config.py           # Configuration parameters
+├── producer.py         # Message generator
+├── consumer.py         # Message processor
+├── application_logs/   # Logs directory
+│   ├── info.log       # INFO type logs
+│   ├── warning.log    # WARNING type logs
+│   ├── error.log      # ERROR type logs
+│   └── debug.log      # DEBUG type logs
+└── README.md          # Documentation
+```
+
+## 🔍 Implementation Details
+
+### MessageProducer
+- Generates random system messages of various types
+- Sends messages to Redis List using LPUSH
+- Supports configurable delay between messages
+- Displays current buffer size
+
+### MessageConsumer
+- Processes messages in batches for efficiency
+- Uses combination of RPOP and BRPOP for non-blocking and blocking reads
+- Saves messages to log files by type
+- Automatically creates log directory and files on startup
+
+### Message Types
+- **INFO**: Informational messages
+- **WARNING**: Warnings
+- **ERROR**: Errors
+- **DEBUG**: Debug information
+
+## 📊 Monitoring
+
+The system provides information about:
+- Number of sent messages
+- Redis buffer size
+- Number of processed messages
+- Success rate of each batch processing
+
+## 🛠️ Possible Extensions
+
+- Adding monitoring via Redis Pub/Sub
+- Implementing multiple consumers
+- Adding error reprocessing mechanism
+- Integration with log collection systems (ELK Stack)
+- Adding performance metrics
+
+## 📝 Notes
+
+- Ensure Redis server is accessible at the configured address
+- For production use, configure Redis authentication
+- Set up log rotation for long-term usage
+- Consider using Redis persistence for reliability
+
+---
+
+# Система обработки сообщений с Redis
+
 Проект представляет собой систему для обработки сообщений с использованием Redis в качестве брокера сообщений. Система состоит из продюсера, генерирующего сообщения, и консьюмера, обрабатывающего их в пакетном режиме с сохранением в логи.
 
 ## 🚀 Основные возможности
